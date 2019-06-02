@@ -190,7 +190,12 @@ def fdsn_available(input_dics, cl, event, target_path):
     sta_fdsn = []
     try:
         if input_dics['data_source'][cl].lower() in ["iris-federator", "eida-routing"]:
-            client_fdsn = RoutingClient(input_dics['data_source'][cl].lower())
+            if input_dics['eida_token_path']:
+                client_fdsn = RoutingClient(
+                        input_dics['data_source'][cl].lower(), 
+                        credentials={'EIDA_TOKEN': input_dics['eida_token_path']})
+            else:
+                client_fdsn = RoutingClient(input_dics['data_source'][cl].lower())
 
             available = client_fdsn.get_stations(
                 network=input_dics['net'],

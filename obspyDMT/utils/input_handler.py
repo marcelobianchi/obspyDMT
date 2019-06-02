@@ -323,6 +323,10 @@ def command_parse():
     group_restrict.add_option("--password_fdsn", action="store",
                               dest="password_fdsn", help=helpmsg)
 
+    helpmsg = "Path to an EIDA token (default: False)."
+    group_restrict.add_option("--eida_token_path", action="store",
+                              dest="eida_token_path", help=helpmsg)
+
     helpmsg = "Username for restricted ArcLink data requests, " \
               "waveform/response modes (default: 'test@obspy.org')."
     group_restrict.add_option("--username_arclink", action="store",
@@ -755,6 +759,7 @@ def read_input_command(parser, **kwargs):
 
                   'username_fdsn': None,
                   'password_fdsn': None,
+                  'eida_token_path': False,
 
                   'username_arclink': 'test@obspy.org',
                   'password_arclink': '',
@@ -912,7 +917,7 @@ def read_input_command(parser, **kwargs):
         options.instrument_correction = True
 
     # =================== Absolute path generator==============================
-    for paths in ['datapath']:
+    for paths in ['datapath', 'eida_token_path']:
         optatr_path = getattr(options, paths)
         if optatr_path:
             if optatr_path != 'N' and not os.path.isabs(optatr_path):
@@ -1163,6 +1168,7 @@ def read_input_command(parser, **kwargs):
 
     input_dics['username_fdsn'] = options.username_fdsn
     input_dics['password_fdsn'] = options.password_fdsn
+    input_dics['eida_token_path'] = options.eida_token_path
 
     input_dics['username_arclink'] = options.username_arclink
     input_dics['password_arclink'] = options.password_arclink

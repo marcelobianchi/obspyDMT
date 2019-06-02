@@ -170,7 +170,11 @@ def fdsn_serial_parallel(stas_avail, event, input_dics, target_path,
     print('%s -- event: %s' % (req_cli, target_path))
 
     if req_cli.lower() in ["iris-federator", "eida-routing"]:
-        client_fdsn = RoutingClient(req_cli)
+        if input_dics['eida_token_path']:
+            client_fdsn = RoutingClient(req_cli, 
+                    credentials={'EIDA_TOKEN': input_dics['eida_token_path']})
+        else:
+            client_fdsn = RoutingClient(req_cli)
     else:
         client_fdsn = Client_fdsn(base_url=req_cli,
                                   user=input_dics['username_fdsn'],
