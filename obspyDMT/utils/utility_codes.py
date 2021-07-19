@@ -530,18 +530,15 @@ def calculate_time_phase(event, sta, bg_model='iasp91'):
         except:
             time_ph = 0
     else:
-        try:
-            for ph in phase_list:
-                tt = tau_bg.get_travel_times(evdp, dist,
-                                             phase_list=[ph])[0].time
-                if not tt:
-                    time_ph = 0
-                    continue
-                else:
-                    time_ph = tt
-                    break
-        except:
-            time_ph = 0
+        for ph in phase_list:
+            tt = tau_bg.get_travel_times(evdp, dist,
+                                         phase_list=[ph])
+            if len(tt) == 0:
+                time_ph = 0
+                continue
+            else:
+                time_ph = tt[0].time
+                break
 
     t_start = event['t1'] + time_ph
     t_end = event['t2'] + time_ph
