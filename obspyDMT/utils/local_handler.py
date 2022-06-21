@@ -76,7 +76,7 @@ def process_data(input_dics, event):
     if len(sta_ev_arr) > 0:
         if len(np.shape(sta_ev_arr)) == 1:
             sta_ev_arr = np.reshape(sta_ev_arr, [1, len(sta_ev_arr)])
-        process_serial_parallel(sta_ev_arr, input_dics, target_path)
+        process_serial_parallel(sta_ev_arr, input_dics, target_path, event)
     else:
         print("[LOCAL] no waveform to process for %s!" % target_path)
 
@@ -120,7 +120,7 @@ def select_data(deg_step, sta_ev):
 # ###################### process_serial_parallel ##############################
 
 
-def process_serial_parallel(sta_ev_arr, input_dics, target_path):
+def process_serial_parallel(sta_ev_arr, input_dics, target_path, event):
     """
     run the processing unit in parallel or in serial
     :param sta_ev_arr:
@@ -147,7 +147,7 @@ def process_serial_parallel(sta_ev_arr, input_dics, target_path):
             p = multiprocessing.Process(target=process_core_iterate,
                                         args=(sta_ev_arr, input_dics,
                                               target_path,
-                                              starti, endi))
+                                              starti, endi, event))
             jobs.append(p)
         for i in range(len(jobs)):
             jobs[i].start()
@@ -155,12 +155,12 @@ def process_serial_parallel(sta_ev_arr, input_dics, target_path):
 
     else:
         process_core_iterate(sta_ev_arr, input_dics, target_path,
-                             0, len(sta_ev_arr))
+                             0, len(sta_ev_arr), event)
 
 # ###################### process_core_iterate #################################
 
 
-def process_core_iterate(sta_ev_arr, input_dics, target_path, starti, endi):
+def process_core_iterate(sta_ev_arr, input_dics, target_path, starti, endi, event):
     """
     running the process_unit for starti and endi defined by
     either serial or parallel mode
@@ -188,7 +188,7 @@ def process_core_iterate(sta_ev_arr, input_dics, target_path, starti, endi):
         if input_dics['pre_process']:
             print('[%s/%s] start processing: %s'
                   % (i+1, len(sta_ev_arr), station_id))
-            process_unit.process_unit(tr_add, target_path, input_dics, staev_ar)
+            process_unit.process_unit(tr_add, target_path, input_dics, staev_ar, event)
 
 # ###################### plot_unit ############################################
 

@@ -428,7 +428,7 @@ def locate(root='.', target='info', num_matches=-1):
 # ##################### convert_to_sac ########################################
 
 
-def convert_to_sac(tr, save_path, sta_ev_arr):
+def convert_to_sac(tr, save_path, sta_ev_arr, event = None):
     """
     convert tr format to SAC and try to fill in some header information
     :param tr:
@@ -478,6 +478,14 @@ def convert_to_sac(tr, save_path, sta_ev_arr):
         pass
     try:
         tr.stats.sac.cmpinc = float(sta_ev_arr[15])
+    except:
+        pass
+    try:
+        tr.stats.sac.o = float(event['datetime']-tr.stats.starttime)
+        tr.stats.sac.lcalda = True
+        tr.stats.sac.t0 = float(event['t1']-tr.stats.starttime)
+        tr.stats.sac.t1 = float(event['t2']-tr.stats.starttime)
+        print(sta_ev_arr)
     except:
         pass
     return tr

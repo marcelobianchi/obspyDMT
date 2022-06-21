@@ -29,7 +29,7 @@ from .utils.utility_codes import convert_to_sac
 # station depth
 
 
-def process_unit(tr_add, target_path, input_dics, staev_ar):
+def process_unit(tr_add, target_path, input_dics, staev_ar, event):
     """
     processing unit, adjustable by the user
     :param tr_add: address of one trace in your dataset. You can use that to
@@ -113,7 +113,7 @@ def process_unit(tr_add, target_path, input_dics, staev_ar):
     if not tr:
         pass
     elif input_dics['waveform_format'] == 'sac':
-        tr = convert_to_sac(tr, save_path, staev_ar)
+        tr = convert_to_sac(tr, save_path, staev_ar, event)
         tr.write(save_path, format='SAC')
     else:
         try:
