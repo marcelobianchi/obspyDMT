@@ -483,9 +483,8 @@ def convert_to_sac(tr, save_path, sta_ev_arr, event = None):
     try:
         tr.stats.sac.o = float(event['datetime']-tr.stats.starttime)
         tr.stats.sac.lcalda = True
-        tr.stats.sac.t0 = float(event['t1']-tr.stats.starttime)
-        tr.stats.sac.t1 = float(event['t2']-tr.stats.starttime)
-        print(sta_ev_arr)
+        #tr.stats.sac.t0 = float(event['t1']-tr.stats.starttime)
+        #tr.stats.sac.t1 = float(event['t2']-tr.stats.starttime)
     except:
         pass
     return tr
