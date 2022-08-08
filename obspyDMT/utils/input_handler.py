@@ -322,31 +322,6 @@ def command_parse():
               "waveform/response modes (default: None)."
     group_restrict.add_option("--password_fdsn", action="store",
                               dest="password_fdsn", help=helpmsg)
-
-    helpmsg = "Username for restricted ArcLink data requests, " \
-              "waveform/response modes (default: 'test@obspy.org')."
-    group_restrict.add_option("--username_arclink", action="store",
-                              dest="username_arclink", help=helpmsg)
-
-    helpmsg = "Password for restricted ArcLink data requests, " \
-              "waveform/response modes (default: '')."
-    group_restrict.add_option("--password_arclink", action="store",
-                              dest="password_arclink", help=helpmsg)
-
-    helpmsg = "Host name of the remote ArcLink server, " \
-              "waveform/response modes, " \
-              "currently supports (Port is stated in the parenthesis, see --port_arclink option) " \
-              "webdc.eu (18001), webdc.eu (18002), eida.knmi.nl (18002), " \
-              "eida.gfz-potsdam.de (18001), eida.resif.fr (18001), eida.ethz.ch (18001), " \
-              "eida.bgr.de (18001), eida.ipgp.fr (18001), seisrequest.iag.usp.br (18001), " \
-              "(default: 'webdc.eu')."
-    group_restrict.add_option("--host_arclink", action="store",
-                              dest="host_arclink", help=helpmsg)
-
-    helpmsg = "Port of the remote ArcLink server, " \
-              "waveform/response modes (default: '18002')."
-    group_restrict.add_option("--port_arclink", action="store",
-                              dest="port_arclink", help=helpmsg)
     parser.add_option_group(group_restrict)
 
     # --------------- event_based mode ----------------------------------------
@@ -695,16 +670,6 @@ def command_parse():
     group_others.add_option("--email", action="store",
                             dest="email", help=helpmsg)
 
-    helpmsg = "Timeout (in sec) for sending a data availability " \
-              "query via ArcLink (default: 40)."
-    group_others.add_option("--arc_avai_timeout", action="store",
-                            dest="arc_avai_timeout", help=helpmsg)
-
-    helpmsg = "Timeout (in sec) for sending a waveform data or " \
-              "metadata request via ArcLink (default: 2)."
-    group_others.add_option("--arc_wave_timeout", action="store",
-                            dest="arc_wave_timeout", help=helpmsg)
-
     parser.add_option_group(group_others)
 
     # parse command line options
@@ -755,11 +720,6 @@ def read_input_command(parser, **kwargs):
 
                   'username_fdsn': None,
                   'password_fdsn': None,
-
-                  'username_arclink': 'test@obspy.org',
-                  'password_arclink': '',
-                  'host_arclink': 'webdc.eu',
-                  'port_arclink': 18002,
 
                   'event_catalog': 'LOCAL',
                   'min_depth': -10.0, 'max_depth': +6000.0,
@@ -882,7 +842,7 @@ def read_input_command(parser, **kwargs):
     if options.version:
         print('\n\t\t' + '*********************************')
         print('\t\t' + '*        obspyDMT version:      *')
-        print('\t\t' + '*\t' + 5*' ' + '2.2.7' + '\t\t*')
+        print('\t\t' + '*\t' + 5*' ' + '2.2.11' + '\t\t*')
         print('\t\t' + '*********************************')
         print('\n')
         dmt_install_path = os.path.abspath(os.path.join(__file__, "..", ".."))
@@ -1166,11 +1126,6 @@ def read_input_command(parser, **kwargs):
     input_dics['username_fdsn'] = options.username_fdsn
     input_dics['password_fdsn'] = options.password_fdsn
 
-    input_dics['username_arclink'] = options.username_arclink
-    input_dics['password_arclink'] = options.password_arclink
-    input_dics['host_arclink'] = options.host_arclink
-    input_dics['port_arclink'] = int(options.port_arclink)
-
     if options.event_catalog:
         input_dics['event_catalog'] = options.event_catalog.upper()
     if options.read_catalog:
@@ -1363,11 +1318,10 @@ def descrip_generator():
         descrip.append('matplotlib: not installed\nerror:\n%s\n' % error)
 
     try:
-        from mpl_toolkits.basemap import __version__ as base_ver
-        from mpl_toolkits.basemap import Basemap
-        descrip.append('Basemap ver: ' + base_ver)
+        from cartopy import __version__ as cart_ver
+        descrip.append('Cartopy ver: ' + cart_ver)
     except Exception as error:
-        descrip.append('Basemap: not installed\nerror:\n%s\n'
+        descrip.append('Cartopy: not installed\nerror:\n%s\n'
                        'You can not use all the plot options' % error)
     print("********************************\n")
     return descrip
